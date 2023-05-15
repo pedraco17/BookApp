@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".DetalleLibroAdminActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/activity_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="150dp"
+        android:layout_marginBottom="250dp"
+        android:columnCount="2"
+        android:rowCount="7">
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:textSize="16dp"
+            android:layout_marginLeft="35dp"
+            android:text="ISBN: " />
+
+        <TextView
+            android:id="@+id/tvISBN"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:textSize="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="35dp"
+            android:text="Titulo: " />
+
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:textSize="16dp"
+            android:layout_row="1"
+            android:layout_column="1" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:textSize="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="35dp"
+            android:text="Autor: " />
+
+        <TextView
+            android:id="@+id/tvAutor"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:textSize="16dp"
+            android:layout_row="2"
+            android:layout_column="1" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:textSize="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="35dp"
+            android:text="Editorial: " />
+
+        <TextView
+            android:id="@+id/tvEditorial"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:textSize="16dp"
+            android:layout_row="3"
+            android:layout_column="1" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="4"
+            android:layout_column="0"
+            android:textSize="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="35dp"
+            android:text="Fecha: " />
+
+        <TextView
+            android:id="@+id/tvFecha"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:textSize="16dp"
+            android:layout_row="4"
+            android:layout_column="1" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="5"
+            android:layout_column="0"
+            android:textSize="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="35dp"
+            android:text="Núm. Paginas: " />
+
+        <TextView
+            android:id="@+id/tvNumPaginas"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:textSize="16dp"
+            android:layout_row="5"
+            android:layout_column="1" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="6"
+            android:layout_column="0"
+            android:textSize="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="35dp"
+            android:text="Stock: " />
+
+        <TextView
+            android:id="@+id/tvStock"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:textSize="16dp"
+            android:layout_row="6"
+            android:layout_column="1" />
+    </GridLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="550dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btModificarLibro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            app:srcCompat="@drawable/editar_perfil"
+            android:onClick="ModificarLibro" />
+
+        <ImageButton
+            android:id="@+id/btEliminarLibro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            app:srcCompat="@drawable/eliminar_libro"
+            android:onClick="EliminarLibro" />
+
+        <ImageButton
+            android:id="@+id/btVolverAtras"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:onClick="VolverAtras"
+            app:srcCompat="@drawable/volver_atras" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

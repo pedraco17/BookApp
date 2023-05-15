@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar_libros"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:title="BookApp"
+    app:titleTextColor="@color/black">
+
+        <ImageButton
+            android:id="@+id/ibPerfil"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:layout_marginLeft="230dp"
+            android:layout_weight="1"
+            android:onClick="abrirPerfil"
+            app:srcCompat="@drawable/perfil" />
+
+        <ImageButton
+            android:id="@+id/ibListaLibrosUsuarios"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:onClick="abrirListaLibrosUsuario"
+            app:srcCompat="@drawable/lista_libros_prestados" />
+</androidx.appcompat.widget.Toolbar>

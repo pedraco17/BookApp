@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".PrestamoLibroActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/activity_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:gravity="bottom"
+        android:layout_marginTop="150dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:textSize="35dp"
+            android:text="Prestamo libro" />
+    </LinearLayout>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="220dp"
+        android:layout_marginBottom="200dp"
+        android:columnCount="2"
+        android:rowCount="4">
+
+        <TextView
+            android:id="@+id/textview4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:textSize="16dp"
+            android:hint="ISBN: " />
+
+        <TextView
+            android:id="@+id/tvISBN"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:gravity="center_vertical"
+            android:textSize="16dp"
+            android:hint="ISBN" />
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:textSize="16dp"
+            android:hint="Titulo: " />
+
+        <TextView
+            android:id="@+id/tvTituloLibro"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:gravity="center_vertical"
+            android:textSize="16dp"
+            android:hint="Titulo" />
+
+        <TextView
+            android:id="@+id/textview2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_row="2"
+            android:gravity="center_vertical"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:textSize="16dp"
+            android:hint="Fecha prestamo: " />
+
+        <TextView
+            android:id="@+id/tvFechaPrestamo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:textSize="16dp"
+            android:hint="Fecha prestamo" />
+
+        <TextView
+            android:id="@+id/textview3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:textSize="16dp"
+            android:hint="Fecha devolución: " />
+
+        <TextView
+            android:id="@+id/tvFechaDevolucion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_row="3"
+            android:layout_column="1"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:textSize="16dp"
+            android:hint="Fecha devolución" />
+    </GridLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="600dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btAceptar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:onClick="Aceptar"
+            android:text="Aceptar" />
+
+        <Button
+            android:id="@+id/btVolverAtras"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:onClick="VolverAtras"
+            android:text="Volver atras" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menuPerfil"
+        android:title="Perfil"
+        android:onClick="abrirPerfil"
+        app:showAsAction="always"
+        android:icon="@drawable/perfil" />
+
+    <item
+        android:id="@+id/menuPrestamo"
+        android:title="Prestamo"
+        app:showAsAction="always"
+        android:icon="@drawable/book" />
+
+    <item
+        android:id="@+id/menuFiltrar"
+        android:title="Filtrar"
+        app:showAsAction="always"
+        android:icon="@drawable/filtro" />
+</menu>

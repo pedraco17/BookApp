@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menuPerfil"
+        android:onClick="abrirPerfil"
+        android:title="Perfil"
+        app:showAsAction="always"
+        android:icon="@drawable/icono_actionbar_perfil" />
+
+    <item
+        android:id="@+id/menuPrestamo"
+        android:onClick="abrirPrestamo"
+        android:title="Prestamo"
+        app:showAsAction="always"
+        android:icon="@drawable/icono_actionbar_book" />
+
+    <item
+        android:id="@+id/menuFiltrar"
+        android:onClick="abrirFiltro"
+        android:title="Filtrar"
+        app:showAsAction="always"
+        android:icon="@drawable/icono_actionbar_filtro" />
+</menu>

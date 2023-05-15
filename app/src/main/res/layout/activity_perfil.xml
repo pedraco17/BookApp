@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".PerfilActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/activity_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:textStyle="bold"
+            android:textSize="50dp"
+            android:text="PERFIL" />
+    </LinearLayout>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="250dp"
+        android:layout_marginBottom="250dp"
+        android:columnCount="2"
+        android:rowCount="5">
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:textSize="18dp"
+            android:layout_marginLeft="35dp"
+            android:text="Expediente: " />
+
+        <TextView
+            android:id="@+id/tvNumExpediente"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:textSize="18dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="35dp"
+            android:text="Email: " />
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:textSize="18dp"
+            android:layout_row="1"
+            android:layout_column="1" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:textSize="18dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="35dp"
+            android:text="Nombre: " />
+
+        <TextView
+            android:id="@+id/tvNombre"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:textSize="18dp"
+            android:layout_row="2"
+            android:layout_column="1" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:textSize="18dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="35dp"
+            android:text="Apellidos: " />
+
+        <TextView
+            android:id="@+id/tvApellidos"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:textSize="18dp"
+            android:layout_row="3"
+            android:layout_column="1" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="4"
+            android:layout_column="0"
+            android:textSize="18dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="35dp"
+            android:text="Fecha: " />
+
+        <TextView
+            android:id="@+id/tvFecha"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:textSize="18dp"
+            android:layout_row="4"
+            android:layout_column="1" />
+    </GridLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="550dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btModificar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:onClick="ModificarPerfil"
+            app:srcCompat="@drawable/editar_perfil" />
+
+        <ImageButton
+            android:id="@+id/btVolverAtras"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:onClick="VolverAtras"
+            app:srcCompat="@drawable/volver_atras" />
+
+        <ImageButton
+            android:id="@+id/btCerrarSesion"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:onClick="CerrarSesion"
+            app:srcCompat="@drawable/cerrar_sesion" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
