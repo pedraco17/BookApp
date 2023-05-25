@@ -89,7 +89,7 @@ public class DetalleLibroActivity extends AppCompatActivity {
         Intent prestarLibro = new Intent(this, PrestamoLibroActivity.class);
         prestarLibro.putExtra("idUsuario", numExpediente);
         prestarLibro.putExtra("idLibro", isbn);
-        prestarLibro.putExtra("tituloLibro", tvTitulo.getText());
+        prestarLibro.putExtra("tituloLibro", tvTitulo.getText().toString());
         startActivity(prestarLibro);
     }
 

@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.sql.Connection;
@@ -25,6 +26,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ModificarPerfilActivity extends AppCompatActivity {
     private static final String AWSDNS = "databasebookapp.c3pxyjlxkspm.us-east-1.rds.amazonaws.com";
@@ -47,7 +50,7 @@ public class ModificarPerfilActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registrarse);
+        setContentView(R.layout.activity_modificar_perfil);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ObtenerReferenciasInterfaz();
         configurarPoliticaThreads();
@@ -75,8 +78,7 @@ public class ModificarPerfilActivity extends AppCompatActivity {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection("jdbc:mysql://" + AWSDNS + ":" + PUERTO + "/" + DBNAME, USERNAME, PASSWORD);
-                String sql = "UPDATE usuarios SET nombre=?, apellidos=?, email=?, password=?, confPassword=?, fechaNacimiento=? " +
-                        "WHERE numExpediente=?";
+                String sql = "UPDATE usuarios SET nombre=?, apellidos=?, email=?, fechaNacimiento=? WHERE numExpediente=?";
                 if (conn != null) {
                     PreparedStatement statement = conn.prepareStatement(sql);
                     if (!etNombre.getText().toString().equals(""))
@@ -84,16 +86,17 @@ public class ModificarPerfilActivity extends AppCompatActivity {
                     if (!etApellidos.getText().toString().equals(""))
                         statement.setString(2, etApellidos.getText().toString());
                     if (!etEmail.getText().toString().equals(""))
-                        statement.setString(3, etEmail.getText().toString());
-                    if (!etPassword.getText().toString().equals("") && !etConfPassword.getText().toString().equals("")) {
-                        if (String.valueOf(etPassword.getText()).equals(String.valueOf(etConfPassword.getText()))) {
-                            statement.setString(4, etPassword.getText().toString());
-                            statement.setString(5, etConfPassword.getText().toString());
+                        if (validarEmail(etEmail.getText().toString())) {
+                            statement.setString(3, etEmail.getText().toString());
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ModificarPerfilActivity.this);
+                            builder.setMessage("Formato de email inadecuado")
+                                    .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss());
+                            builder.show();
                         }
-                    }
                     if (!tvFecha.getText().toString().equals(""))
-                        statement.setString(6, tvFecha.getText().toString());
-                    statement.setInt(7, Integer.parseInt(etNumExpediente.getText().toString()));
+                        statement.setString(4, tvFecha.getText().toString());
+                    statement.setInt(5, Integer.parseInt(etNumExpediente.getText().toString()));
                     update = statement.executeUpdate();
                     if (update > 0){
                         result = false;
@@ -111,6 +114,13 @@ public class ModificarPerfilActivity extends AppCompatActivity {
         public void onPostExecute(Void aVoid){
             super.onPostExecute(aVoid);
         }
+    }
+
+    private boolean validarEmail(String email){
+        String EMAIL_PATTERN = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$";
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     public void VolverAtras(View v) {
@@ -205,8 +215,6 @@ public class ModificarPerfilActivity extends AppCompatActivity {
                         etNombre.setText(rs.getString("nombre"));
                         etApellidos.setText(rs.getString("apellidos"));
                         etEmail.setText(rs.getString("email"));
-                        etPassword.setText(rs.getString("password"));
-                        etConfPassword.setText(rs.getString("confPassword"));
                         tvFecha.setText(rs.getString("fechaNacimiento"));
                     }
                 } else {

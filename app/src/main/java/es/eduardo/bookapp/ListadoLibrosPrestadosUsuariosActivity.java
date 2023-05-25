@@ -84,7 +84,7 @@ public class ListadoLibrosPrestadosUsuariosActivity extends AppCompatActivity {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection("jdbc:mysql://" + AWSDNS + ":" + PUERTO + "/" + DBNAME, USERNAME, PASSWORD);
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT idLibro, tituloLibro, fechaPrestamo, fechaDevolucion FROM prestamo WHERE idUsuario=" + idUsuario);
+                ResultSet rs = stmt.executeQuery("SELECT * FROM prestamo WHERE idUsuario=" + idUsuario);
                 while (rs.next()) {
                     String idLibro = rs.getString("idLibro");
                     String tituloLibro = rs.getString("tituloLibro");

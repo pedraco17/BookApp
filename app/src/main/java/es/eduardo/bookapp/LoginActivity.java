@@ -1,6 +1,7 @@
 package es.eduardo.bookapp;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -22,10 +23,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Base64;
 
 import es.eduardo.bookapp.Modelos.Usuarios;
 
@@ -71,7 +76,12 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Object... objects) {
             String email = (String) objects[0];
-            String pass = (String) objects[1];
+            String pass = null;
+            try {
+                pass = getSHA256Hash((String) objects[1]);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
             String sql = "SELECT * FROM usuarios WHERE email LIKE '" + email + "'";
             try {
                 Class.forName("com.mysql.jdbc.Driver");
@@ -79,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 if (rs.next()) {
-                    if (email.equals("admin") && pass.equals("admin")) {
+                    if (rs.getString("email").equals("admin") && pass.equals(rs.getString("password"))) {
                         Intent admin = new Intent(LoginActivity.this, ListadoLibrosAdminActivity.class);
                         startActivity(admin);
                         return true;
@@ -106,6 +116,13 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Email o contraseña mal introducidos", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    @SuppressLint("NewApi")
+    private String getSHA256Hash(String password) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(hash);
     }
 
     private void ObtenerReferenciasInterfaz() {

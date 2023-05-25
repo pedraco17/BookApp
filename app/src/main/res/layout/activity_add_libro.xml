@@ -34,15 +34,30 @@
             android:textSize="35dp"
             android:text="Añadir libro" />
 
-        <EditText
-            android:id="@+id/etISBN"
+        <RelativeLayout
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_row="1"
-            android:layout_columnSpan="2"
-            android:inputType="number"
-            android:hint="ISBN" />
+            android:layout_columnSpan="2">
+
+            <EditText
+                android:id="@+id/etISBN"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="ISBN"
+                android:paddingLeft="5dp"
+                android:inputType="text" />
+
+            <ImageButton
+                android:id="@+id/btISBN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/filtro"
+                android:onClick="BuscarISBN" />
+        </RelativeLayout>
 
         <EditText
             android:id="@+id/etTitulo"

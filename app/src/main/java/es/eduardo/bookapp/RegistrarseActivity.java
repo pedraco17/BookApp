@@ -1,5 +1,6 @@
 package es.eduardo.bookapp;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,12 +22,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Base64;
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegistrarseActivity extends AppCompatActivity {
     private static final String AWSDNS = "databasebookapp.c3pxyjlxkspm.us-east-1.rds.amazonaws.com";
@@ -63,11 +70,6 @@ public class RegistrarseActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            if (!String.valueOf(etPassword.getText()).equals(String.valueOf(etConfPassword.getText()))) {
-                etPassword.setText("");
-                etConfPassword.setText("");
-                Toast.makeText(RegistrarseActivity.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
-            }
         }
 
         @Override
@@ -75,8 +77,8 @@ public class RegistrarseActivity extends AppCompatActivity {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection("jdbc:mysql://" + AWSDNS + ":" + PUERTO + "/" + DBNAME, USERNAME, PASSWORD);
-                String sql = "INSERT INTO usuarios (numExpediente, nombre, apellidos, email, password, confPassword, fechaNacimiento) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO usuarios (numExpediente, nombre, apellidos, email, password, fechaNacimiento) " +
+                        "VALUES (?, ?, ?, ?, ?, ?)";
                 if (conn != null) {
                     PreparedStatement statement = conn.prepareStatement(sql);
                     if (!etNumExpediente.getText().toString().equals("")) {
@@ -91,15 +93,28 @@ public class RegistrarseActivity extends AppCompatActivity {
                     if (!etApellidos.getText().toString().equals(""))
                         statement.setString(3, etApellidos.getText().toString());
                     if (!etEmail.getText().toString().equals(""))
-                        statement.setString(4, etEmail.getText().toString());
+                        if (validarEmail(etEmail.getText().toString())) {
+                            statement.setString(4, etEmail.getText().toString());
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(RegistrarseActivity.this);
+                            builder.setMessage("Formato de email inadecuado")
+                                    .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss());
+                            builder.show();
+                        }
                     if (!etPassword.getText().toString().equals("") && !etConfPassword.getText().toString().equals("")) {
-                        if (String.valueOf(etPassword.getText()).equals(String.valueOf(etConfPassword.getText()))) {
-                            statement.setString(5, etPassword.getText().toString());
-                            statement.setString(6, etConfPassword.getText().toString());
+                        if (!String.valueOf(etPassword.getText()).equals(String.valueOf(etConfPassword.getText()))) {
+                            etPassword.setText("");
+                            etConfPassword.setText("");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(RegistrarseActivity.this);
+                            builder.setMessage("Las contraseñas no coinciden")
+                                    .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss());
+                            builder.show();
+                        } else {
+                            statement.setString(5, getSHA256Hash(etPassword.getText().toString()));
                         }
                     }
                     if (!tvFecha.getText().toString().equals(""))
-                        statement.setString(7, tvFecha.getText().toString());
+                        statement.setString(6, tvFecha.getText().toString());
                     insert = statement.executeUpdate();
                     if (insert > 0){
                         result = false;
@@ -132,6 +147,20 @@ public class RegistrarseActivity extends AppCompatActivity {
         public void onPostExecute(Void aVoid){
             super.onPostExecute(aVoid);
         }
+    }
+
+    private boolean validarEmail(String email){
+        String EMAIL_PATTERN = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$";
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    @SuppressLint("NewApi")
+    private String getSHA256Hash(String password) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(hash);
     }
 
     public void VolverAtras(View v) {

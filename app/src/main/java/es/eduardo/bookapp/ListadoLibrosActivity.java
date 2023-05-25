@@ -116,6 +116,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
 
         @Override
         public void onPostExecute(Void aVoid){
+            listView.setAdapter(null);
             adapter = new BookListAdapter(ListadoLibrosActivity.this, listaLibros);
             listView.setAdapter(adapter);
             super.onPostExecute(aVoid);
