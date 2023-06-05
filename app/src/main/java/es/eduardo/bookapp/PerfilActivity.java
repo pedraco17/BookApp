@@ -1,6 +1,7 @@
 package es.eduardo.bookapp;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import android.os.StrictMode;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -17,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.sql.Connection;
@@ -96,7 +99,27 @@ public class PerfilActivity extends AppCompatActivity {
     }
 
     public void VolverAtras(View v) {
-        this.finish();
+        if (LoginActivity.u.getEmail().equals("admin")) {
+            Intent lista = new Intent(this, ListadoLibrosAdminActivity.class);
+            startActivity(lista);
+        } else {
+            Intent lista = new Intent(this, ListadoLibrosActivity.class);
+            startActivity(lista);
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == event.KEYCODE_BACK) {
+            if (LoginActivity.u.getEmail().equals("admin")) {
+                Intent lista = new Intent(this, ListadoLibrosAdminActivity.class);
+                startActivity(lista);
+            } else {
+                Intent lista = new Intent(this, ListadoLibrosActivity.class);
+                startActivity(lista);
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void ObtenerReferenciasInterfaz() {

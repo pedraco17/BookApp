@@ -118,7 +118,8 @@ public class ModificarLibroActivity extends AppCompatActivity {
     }
 
     public void VolverAtras(View v) {
-        this.finish();
+        Intent lista = new Intent(this, DetalleLibroAdminActivity.class);
+        startActivity(lista);
     }
 
     public void Aceptar(View v) {

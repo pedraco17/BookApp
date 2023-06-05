@@ -124,7 +124,8 @@ public class ModificarPerfilActivity extends AppCompatActivity {
     }
 
     public void VolverAtras(View v) {
-        this.finish();
+        Intent lista = new Intent(this, PerfilActivity.class);
+        startActivity(lista);
     }
 
     public void Aceptar(View v) {
