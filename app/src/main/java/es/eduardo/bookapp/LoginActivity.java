@@ -1,21 +1,16 @@
 package es.eduardo.bookapp;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -23,28 +18,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Base64;
-
+import es.eduardo.bookapp.Controladores.Controlador;
+import es.eduardo.bookapp.Controladores.ControladorUsuario;
 import es.eduardo.bookapp.Modelos.Usuarios;
 
 public class LoginActivity extends AppCompatActivity {
-    private static final String AWSDNS = "databasebookapp.c3pxyjlxkspm.us-east-1.rds.amazonaws.com";
-    private static final String DBNAME = "BookApp";
-    private static final int PUERTO = 3306;
-    private static final String USERNAME = "admin";
-    private static final String PASSWORD = "Pedraco_1998";
     private EditText etEmail;
     private EditText etPassword;
     private Button btIniciarSesion;
     private Button btRegistrarse;
     public static Usuarios u = new Usuarios();
+    private ControladorUsuario controladorBD;
+    private Controlador controlador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +39,26 @@ public class LoginActivity extends AppCompatActivity {
         ObtenerReferenciasInterfaz();
         pedirPermisos();
         configurarPoliticaThreads();
+        controlador = new Controlador();
+        controladorBD = new ControladorUsuario();
         btIniciarSesion.getBackground().setAlpha(0);
         btRegistrarse.getBackground().setAlpha(0);
     }
 
     public void IniciarSesion(View v) {
-        new Login().execute(etEmail.getText().toString(), etPassword.getText().toString());
+        String result = controladorBD.IniciarSesion(etEmail.getText().toString(), etPassword.getText().toString());
+        if (result.equals("admin")) {
+            Intent admin = new Intent(this, ListadoLibrosAdminActivity.class);
+            startActivity(admin);
+            Toast.makeText(this, "Se ha iniciado sesión correctamente", Toast.LENGTH_LONG).show();
+        } else if (result.equals("estudiante")) {
+            Intent usuario = new Intent(this, ListadoLibrosActivity.class);
+            startActivity(usuario);
+            Toast.makeText(this, "Se ha iniciado sesión correctamente", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Email o contraseña mal introducidos", Toast.LENGTH_LONG).show();
+        }
+        u.setEmail(etEmail.getText().toString());
     }
 
     public void Registrarse(View v) {
@@ -67,62 +66,10 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(todos);
     }
 
-    class Login extends AsyncTask<Object, Void, Boolean> {
-        @Override
-        public void onPreExecute(){
-            super.onPreExecute();
+    public void ShowHidePass(View view) {
+        if (view.getId() == R.id.show_pass_btn) {
+            controlador.MostrarPassword(etPassword, view);
         }
-
-        @Override
-        protected Boolean doInBackground(Object... objects) {
-            String email = (String) objects[0];
-            String pass = null;
-            try {
-                pass = getSHA256Hash((String) objects[1]);
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-            String sql = "SELECT * FROM usuarios WHERE email LIKE '" + email + "'";
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = DriverManager.getConnection("jdbc:mysql://" + AWSDNS + ":" + PUERTO + "/" + DBNAME, USERNAME, PASSWORD);
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql);
-                if (rs.next()) {
-                    if (rs.getString("email").equals("admin") && pass.equals(rs.getString("password"))) {
-                        Intent admin = new Intent(LoginActivity.this, ListadoLibrosAdminActivity.class);
-                        startActivity(admin);
-                        return true;
-                    } else if (email.equals(rs.getString("email")) && pass.equals(rs.getString("password"))) {
-                        Intent todos = new Intent(LoginActivity.this, ListadoLibrosActivity.class);
-                        startActivity(todos);
-                        return true;
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-            return false;
-        }
-
-        @Override
-        public void onPostExecute(Boolean aVoid){
-            super.onPostExecute(aVoid);
-            if (aVoid) {
-                u.setEmail(etEmail.getText().toString());
-                Toast.makeText(LoginActivity.this, "Se ha iniciado sesión correctamente", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(LoginActivity.this, "Email o contraseña mal introducidos", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    @SuppressLint("NewApi")
-    private String getSHA256Hash(String password) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(hash);
     }
 
     private void ObtenerReferenciasInterfaz() {
@@ -130,20 +77,6 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         btIniciarSesion = (Button) findViewById(R.id.btIniciarSesion);
         btRegistrarse = (Button) findViewById(R.id.btRegistrarse);
-    }
-
-    public void ShowHidePass(View view){
-        if (view.getId() == R.id.show_pass_btn) {
-            if (etPassword.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())) {
-                ((ImageView)(view)).setImageResource(R.drawable.hide_eye);
-                //Show Password
-                etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            } else {
-                ((ImageView)(view)).setImageResource(R.drawable.show_eye);
-                //Hide Password
-                etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            }
-        }
     }
 
     @Override

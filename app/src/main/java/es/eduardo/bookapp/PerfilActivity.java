@@ -1,49 +1,27 @@
 package es.eduardo.bookapp;
 
-import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Calendar;
-
-import es.eduardo.bookapp.Modelos.Usuarios;
+import es.eduardo.bookapp.Controladores.ControladorUsuario;
 
 public class PerfilActivity extends AppCompatActivity {
-    private static final String AWSDNS = "databasebookapp.c3pxyjlxkspm.us-east-1.rds.amazonaws.com";
-    private static final String DBNAME = "BookApp";
-    private static final int PUERTO = 3306;
-    private static final String USERNAME = "admin";
-    private static final String PASSWORD = "Pedraco_1998";
     private TextView etNumExpediente;
     private TextView etEmail;
     private TextView etNombre;
     private TextView etApellidos;
     private TextView tvFecha;
-    private ImageButton volverAtras;
     private ImageButton modificar;
     private ImageButton cerrarSesion;
+    private ControladorUsuario controladorBD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,39 +31,9 @@ public class PerfilActivity extends AppCompatActivity {
         ObtenerReferenciasInterfaz();
         configurarPoliticaThreads();
         modificar.getBackground().setAlpha(0);
-        volverAtras.getBackground().setAlpha(0);
         cerrarSesion.getBackground().setAlpha(0);
-        new Task().execute();
-    }
-
-    class Task extends AsyncTask<Void, Void, Void> {
-        String error = "";
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = DriverManager.getConnection("jdbc:mysql://" + AWSDNS + ":" + PUERTO + "/" + DBNAME, USERNAME, PASSWORD);
-                String sql = "SELECT * FROM usuarios WHERE email='" + LoginActivity.u.getEmail() + "'";
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql);
-                if (rs.next()) {
-                    etNumExpediente.setText(rs.getInt("numExpediente") + "");
-                    etNombre.setText(rs.getString("nombre"));
-                    etApellidos.setText(rs.getString("apellidos"));
-                    etEmail.setText(rs.getString("email"));
-                    tvFecha.setText(rs.getString("fechaNacimiento"));
-                }
-            } catch (Exception e) {
-                error = e.toString();
-            }
-            return null;
-        }
-
-        @Override
-        public void onPostExecute(Void aVoid){
-            super.onPostExecute(aVoid);
-        }
+        controladorBD = new ControladorUsuario();
+        controladorBD.CargarPerfil(etNumExpediente, etNombre, etApellidos, etEmail, tvFecha);
     }
 
     public void ModificarPerfil(View view) {
@@ -98,26 +46,11 @@ public class PerfilActivity extends AppCompatActivity {
         startActivity(cerrarSesion);
     }
 
-    public void VolverAtras(View v) {
-        if (LoginActivity.u.getEmail().equals("admin")) {
-            Intent lista = new Intent(this, ListadoLibrosAdminActivity.class);
-            startActivity(lista);
-        } else {
-            Intent lista = new Intent(this, ListadoLibrosActivity.class);
-            startActivity(lista);
-        }
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == event.KEYCODE_BACK) {
-            if (LoginActivity.u.getEmail().equals("admin")) {
-                Intent lista = new Intent(this, ListadoLibrosAdminActivity.class);
-                startActivity(lista);
-            } else {
-                Intent lista = new Intent(this, ListadoLibrosActivity.class);
-                startActivity(lista);
-            }
+            Intent lista = new Intent(this, ListadoLibrosActivity.class);
+            startActivity(lista);
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -128,7 +61,6 @@ public class PerfilActivity extends AppCompatActivity {
         etNombre = (TextView) findViewById(R.id.tvNombre);
         etApellidos = (TextView) findViewById(R.id.tvApellidos);
         tvFecha = (TextView) findViewById(R.id.tvFecha);
-        volverAtras = (ImageButton) findViewById(R.id.btVolverAtras);
         modificar = (ImageButton) findViewById(R.id.btModificar);
         cerrarSesion = (ImageButton) findViewById(R.id.btCerrarSesion);
     }

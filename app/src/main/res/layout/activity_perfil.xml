@@ -153,16 +153,6 @@
             app:srcCompat="@drawable/editar_perfil" />
 
         <ImageButton
-            android:id="@+id/btVolverAtras"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:onClick="VolverAtras"
-            app:srcCompat="@drawable/volver_atras" />
-
-        <ImageButton
             android:id="@+id/btCerrarSesion"
             android:layout_width="60dp"
             android:layout_height="60dp"

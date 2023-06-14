@@ -1,13 +1,10 @@
 package es.eduardo.bookapp;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,18 +12,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import es.eduardo.bookapp.Controladores.ControladorLibros;
+import es.eduardo.bookapp.Controladores.ControladorUsuario;
 
 public class DetalleLibroAdminActivity extends AppCompatActivity {
-    private static final String AWSDNS = "databasebookapp.c3pxyjlxkspm.us-east-1.rds.amazonaws.com";
-    private static final String DBNAME = "BookApp";
-    private static final int PUERTO = 3306;
-    private static final String USERNAME = "admin";
-    private static final String PASSWORD = "Pedraco_1998";
     private TextView tvISBN;
     private TextView tvTitulo;
     private TextView tvAutor;
@@ -37,8 +26,7 @@ public class DetalleLibroAdminActivity extends AppCompatActivity {
     private ImageButton volverAtras;
     private ImageButton modificarLibro;
     private ImageButton eliminarLibro;
-    private boolean result = true;
-    public static String isbn;
+    private ControladorLibros libros;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +35,11 @@ public class DetalleLibroAdminActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ObtenerReferenciasInterfaz();
         configurarPoliticaThreads();
-        Intent detalle = getIntent();
-        isbn = detalle.getStringExtra("isbn");
         volverAtras.getBackground().setAlpha(0);
         modificarLibro.getBackground().setAlpha(0);
         eliminarLibro.getBackground().setAlpha(0);
-        new Task().execute();
+        libros = new ControladorLibros();
+        libros.DetalleLibroAdmin(tvISBN, tvTitulo, tvAutor, tvEditorial, tvFecha, tvNumPaginas, tvStock);
     }
 
     @Override
@@ -60,44 +47,11 @@ public class DetalleLibroAdminActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    class Task extends AsyncTask<Void, Void, Void> {
-        String error = "";
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = DriverManager.getConnection("jdbc:mysql://" + AWSDNS + ":" + PUERTO + "/" + DBNAME, USERNAME, PASSWORD);
-                String sql = "SELECT * FROM libros WHERE ISBN='" + isbn + "'";
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql);
-                if (rs.next()) {
-                    tvISBN.setText(rs.getString("ISBN"));
-                    tvTitulo.setText(rs.getString("titulo"));
-                    tvAutor.setText(rs.getString("autor"));
-                    tvEditorial.setText(rs.getString("editorial"));
-                    tvFecha.setText(rs.getString("fechaLanzamiento"));
-                    tvNumPaginas.setText(rs.getString("numPaginas"));
-                    tvStock.setText(rs.getString("stock"));
-                }
-            } catch (Exception e) {
-                error = e.toString();
-            }
-            return null;
-        }
-
-        @Override
-        public void onPostExecute(Void aVoid){
-            super.onPostExecute(aVoid);
-        }
-    }
-
     public void EliminarLibro(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(DetalleLibroAdminActivity.this);
         builder.setMessage("¿Desea eliminar el libro?")
                 .setPositiveButton("Si", (dialog, which) -> {
-                    new EliminarLibro().doInBackground();
-                    if (!result) {
+                    if (!libros.EliminarLibro(tvISBN.getText().toString())) {
                         Toast.makeText(DetalleLibroAdminActivity.this, "Se ha eliminado el libro correctamente", Toast.LENGTH_LONG).show();
                         Intent lista = new Intent(DetalleLibroAdminActivity.this, ListadoLibrosAdminActivity.class);
                         startActivity(lista);
@@ -135,32 +89,5 @@ public class DetalleLibroAdminActivity extends AppCompatActivity {
     private void configurarPoliticaThreads() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-    }
-
-    class EliminarLibro extends AsyncTask<Void, Void, Void> {
-        String error = "";
-        int delete;
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = DriverManager.getConnection("jdbc:mysql://" + AWSDNS + ":" + PUERTO + "/" + DBNAME, USERNAME, PASSWORD);
-                String sql = "DELETE FROM libros WHERE ISBN='" + isbn + "'";
-                if (conn != null) {
-                    PreparedStatement statement = conn.prepareStatement(sql);
-                    delete = statement.executeUpdate();
-                    if (delete > 0) result = false;
-                }
-            } catch (Exception e) {
-                error = e.toString();
-            }
-            return null;
-        }
-
-        @Override
-        public void onPostExecute(Void aVoid){
-            super.onPostExecute(aVoid);
-        }
     }
 }
