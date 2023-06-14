@@ -18,28 +18,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <SearchView
+            android:id="@+id/busqueda"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="70dp">
-
-            <EditText
-                android:id="@+id/etBusqueda"
-                android:layout_width="360dp"
-                android:layout_height="wrap_content"
-                android:hint="Busqueda..."
-                android:inputType="text" />
-
-            <ImageButton
-                android:id="@+id/btFiltro"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/filtro"
-                android:background="@color/white"
-                android:onClick="Busqueda" />
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp" />
 
         <ListView
             android:id="@+id/listView"

@@ -10,18 +10,46 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 import es.eduardo.bookapp.Modelos.Libros;
 
 public class BookListAdapter extends ArrayAdapter<Libros> {
     private Context context;
     private List<Libros> libros;
+    private List<Libros> listaOriginal;
 
     public BookListAdapter(Context context, List<Libros> libros) {
         super(context, R.layout.lista_libros, libros);
         this.context = context;
         this.libros = libros;
+        listaOriginal = new ArrayList<>();
+        listaOriginal.addAll(libros);
+    }
+
+    public void Filtrado(String cad) {
+        int longitud = cad.length();
+        if (longitud == 0) {
+            libros.clear();
+            libros.addAll(listaOriginal);
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                List<Libros> lista = libros.stream().filter(i -> i.getTitulo().toLowerCase()
+                        .contains(cad.toLowerCase())).collect(Collectors.toList());
+                libros.clear();
+                libros.addAll(lista);
+            } else {
+                for (Libros l : listaOriginal) {
+                    if(l.getTitulo().toLowerCase().contains(cad.toLowerCase())) {
+                        libros.add(l);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @Override

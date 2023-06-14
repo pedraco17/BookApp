@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,12 +20,11 @@ import es.eduardo.bookapp.Controladores.ControladorLibros;
 import es.eduardo.bookapp.Controladores.ControladorUsuario;
 import es.eduardo.bookapp.Modelos.Libros;
 
-public class ListadoLibrosActivity extends AppCompatActivity {
+public class ListadoLibrosActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private ListView listView;
     private BookListAdapter adapter;
     public static Libros libroSeleccionado;
-    private EditText etBusqueda;
-    private ImageButton btBusqueda;
+    private SearchView busqueda;
     private ControladorLibros libros;
     private List<Libros> listaLibros;
 
@@ -34,9 +34,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listado_libros);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         listView = (ListView) findViewById(R.id.listView);
-        etBusqueda = (EditText) findViewById(R.id.etBusqueda);
-        btBusqueda = (ImageButton) findViewById(R.id.btFiltro);
-        btBusqueda.getBackground().setAlpha(0);
+        busqueda = (SearchView) findViewById(R.id.busqueda);
         libros = new ControladorLibros();
         listaLibros = libros.ListadoLibros();
         adapter = new BookListAdapter(this, listaLibros);
@@ -47,6 +45,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
             Intent detalleLibro = new Intent(ListadoLibrosActivity.this, DetalleLibroActivity.class);
             startActivity(detalleLibro);
         });
+        busqueda.setOnQueryTextListener(this);
     }
 
     public void abrirPerfil(View view){
@@ -82,5 +81,16 @@ public class ListadoLibrosActivity extends AppCompatActivity {
             builder.show();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adapter.Filtrado(newText);
+        return false;
     }
 }

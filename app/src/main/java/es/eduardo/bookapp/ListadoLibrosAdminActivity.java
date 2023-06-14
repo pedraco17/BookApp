@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,18 +17,20 @@ import java.util.List;
 import es.eduardo.bookapp.Controladores.ControladorLibros;
 import es.eduardo.bookapp.Modelos.Libros;
 
-public class ListadoLibrosAdminActivity extends AppCompatActivity {
+public class ListadoLibrosAdminActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private ListView listView;
     private BookListAdapter adapter;
     public static Libros libroSeleccionado;
     private ControladorLibros libros;
     private List<Libros> listaLibros;
+    private SearchView busqueda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado_libros_admin);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        busqueda = (SearchView) findViewById(R.id.busqueda);
         libros = new ControladorLibros();
         listaLibros = libros.ListadoLibros();
         listView = (ListView) findViewById(R.id.listView);
@@ -39,6 +42,7 @@ public class ListadoLibrosAdminActivity extends AppCompatActivity {
             Intent detalleLibro = new Intent(ListadoLibrosAdminActivity.this, DetalleLibroAdminActivity.class);
             startActivity(detalleLibro);
         });
+        busqueda.setOnQueryTextListener(this);
     }
 
     public void abrirPerfil(View view){
@@ -89,5 +93,16 @@ public class ListadoLibrosAdminActivity extends AppCompatActivity {
             builder.show();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adapter.Filtrado(newText);
+        return false;
     }
 }
