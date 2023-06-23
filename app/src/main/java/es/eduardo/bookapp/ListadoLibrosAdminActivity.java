@@ -60,6 +60,11 @@ public class ListadoLibrosAdminActivity extends AppCompatActivity implements Sea
         startActivity(listaPrestados);
     }
 
+    public void cerrarSesion(View view) {
+        Intent cerrarSesion = new Intent(this, LoginActivity.class);
+        startActivity(cerrarSesion);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

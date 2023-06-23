@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 import es.eduardo.bookapp.R;
 
 public class Controlador {
-    public void Controlador() {}
+    public Controlador() {}
 
     public boolean validarEmail(String email){
         String EMAIL_PATTERN = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$";

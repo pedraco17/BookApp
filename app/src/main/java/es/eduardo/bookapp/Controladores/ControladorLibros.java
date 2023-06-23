@@ -39,15 +39,6 @@ public class ControladorLibros extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
-    public void AbrirConexión() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://" + AWSDNS + ":" + PUERTO + "/" + DBNAME, USERNAME, PASSWORD);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static Connection getConnection() {
         return conn;
     }
@@ -59,6 +50,15 @@ public class ControladorLibros extends AsyncTask<Void, Void, Void> {
                 System.out.println("Conexión desconectada.");
             }
         }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void AbrirConexión() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://" + AWSDNS + ":" + PUERTO + "/" + DBNAME, USERNAME, PASSWORD);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

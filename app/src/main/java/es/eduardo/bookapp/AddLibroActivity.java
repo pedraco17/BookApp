@@ -119,7 +119,6 @@ public class AddLibroActivity extends AppCompatActivity {
         try {
             JSONObject jsonObject = new JSONObject(bookInfo);
             JSONArray itemsArray = jsonObject.getJSONArray("items");
-
             if (itemsArray.length() > 0) {
                 JSONObject bookObject = itemsArray.getJSONObject(0);
                 JSONObject volumeInfo = bookObject.getJSONObject("volumeInfo");
@@ -128,9 +127,7 @@ public class AddLibroActivity extends AppCompatActivity {
                 StringBuilder authorsBuilder = new StringBuilder();
                 for (int i = 0; i < authorsArray.length(); i++) {
                     authorsBuilder.append(authorsArray.getString(i));
-                    if (i < authorsArray.length() - 1) {
-                        authorsBuilder.append(", ");
-                    }
+                    if (i < authorsArray.length() - 1) authorsBuilder.append(", ");
                 }
                 String authors = authorsBuilder.toString();
                 String publisher = volumeInfo.optString("publisher", "");
